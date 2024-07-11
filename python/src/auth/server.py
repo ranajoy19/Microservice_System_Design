@@ -19,7 +19,7 @@ server.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
 server.config["MYSQL_PORT"] = os.getenv("MYSQL_PORT")
 
 
-@server.route("/login", method=["POST"])
+@server.route("/login", methods=["POST"])
 def login():
     auth = request.authorization
 
@@ -42,7 +42,7 @@ def login():
         return "invalide credentials", 401
 
 
-@server.route("/validate", method=["POST"])
+@server.route("/validate", methods=["POST"])
 def validate():
     encoded_jwt = request.headers["Authorization"]
     if not encoded_jwt:
