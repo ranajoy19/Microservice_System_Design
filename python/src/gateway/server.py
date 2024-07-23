@@ -19,7 +19,7 @@ connection = pika.BlockingConnection(pika.ConnectionParameters("rabbitmq"))
 channel = connection.channel()
 
 
-@server.routh("/login", methods=["POST"])
+@server.route("/login", methods=["POST"])
 def login():
     token, err = access.login(request)
     if not err:
@@ -28,7 +28,7 @@ def login():
         return err
 
 
-@server.routh("/upload", methods=["POST"])
+@server.route("/upload", methods=["POST"])
 def upload():
     access, err = validate.token(request)
 
@@ -59,4 +59,4 @@ def download():
 
 
 if __name__ == "__main__":
-    server.host(host="0.0.0.0", port=8080)
+    server.run(host="0.0.0.0", port=8080)
