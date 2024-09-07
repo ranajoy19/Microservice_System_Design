@@ -1,5 +1,6 @@
 minikube start --vm-driver=hyperv --force
-kubectl apply -f ./  
+kubectl apply -f ./
+kubectl delete -f ./        
 
 
 Run minikube delete in your terminal to remove the existing container
@@ -13,3 +14,6 @@ kubectl get pods
 
 
 kubectl scale deployment --replicas=0 gateway
+
+
+kubectl logs -f gateway-7cc9cdfff9-46779 

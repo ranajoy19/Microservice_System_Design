@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 def login(request):
     auth = request.authorization
     if not auth:
@@ -17,4 +18,4 @@ def login(request):
     if response.status_code == 200:
         return response.text, None
     else:
-        return  
+        return None, (response.text, response.status_code)

@@ -30,24 +30,35 @@ def login():
 
 @server.route("/upload", methods=["POST"])
 def upload():
-    access, err = validate.token(request)
+    try:
+        access, err = validate.token(request)
+        if err:
+            return err
+        print("check", type(access), err, flush=True)
+        try:
+            access = json.loads(access)
+            print(access, flush=True)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}", flush=True)
+        access = json.load(access)
+        print("access", access, flush=True)
+        if access["admin"]:
+            print("go,,////")
+            if len(request.files) > 1 or len(request.files) < 1:
+                return "exactly 1 file required", 400
 
-    if err:
-        return err
-    access = json.load(access)
-    if access["admin"]:
-        if len(request.files) > 1 or len(request.files) < 1:
-            return "exactly 1 file required", 400
+            for _, f in request.files.items():
+                print("inside upload", flush=True)
+                err = util.upload(f, fs_videos, channel, access)
+                if err:
+                    return err
 
-        for _, f in request.files.items():
-            err = util.upload(f, fs_videos, channel, access)
-
-            if err:
-                return err
-
-        return "success!", 200
-    else:
-        return "not authorized", 401
+            return "success!", 200
+        else:
+            return "not authorized", 401
+    except Exception as err:
+        print("err", err, err.__traceback__.tb_lineno, flush=True)
+        return str(err), 500
 
 
 @server.route("/download", methods=["GET"])
